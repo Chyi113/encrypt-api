@@ -17,7 +17,7 @@ app.post('/api/encrypt', async (req, res) => {
     // 取得前端送來的 payload
     const data = req.body
 
-    // 檢查必填欄位（可依需要擴充）
+    // 檢查必填欄位
     if (!data) {
       return res.status(400).json({ error: 'payload is required' })
     }
@@ -31,7 +31,6 @@ app.post('/api/encrypt', async (req, res) => {
       .setProtectedHeader({ alg: 'RSA-OAEP', enc: 'A256GCM' })
       .encrypt(publicKey)
     
-    // 也可同時回應 JSON 欄位型態，方便你 debug
     const [protectedHeader, encrypted_key, iv, ciphertext, tag] = jweString.split('.')
 
     res.json({
@@ -47,6 +46,8 @@ app.post('/api/encrypt', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log('🚀 加密服務啟動於 http://localhost:3000/api/encrypt')
-})
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`API 啟動於 http://localhost:${PORT}/api/encrypt`);
+});
+
